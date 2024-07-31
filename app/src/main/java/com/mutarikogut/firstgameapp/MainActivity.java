@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     TextView timeText;
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView8;
     ImageView imageView9;
     ImageView[] imageArray;
+    Handler handler;
+    Runnable runnable;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -41,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         imageView7 = findViewById(R.id.imageView7);
         imageView8 = findViewById(R.id.imageView8);
         imageView9 = findViewById(R.id.imageView9);
+
+
 
         imageArray = new ImageView[] {imageView,imageView2,imageView3,imageView4,imageView5,imageView6,imageView7,imageView8,imageView9};
         hideImages();
@@ -64,8 +71,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void hideImages(){
-        for(ImageView image: imageArray){
-            image.setVisibility(View.INVISIBLE);
-        }
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                for(ImageView image: imageArray){
+                    image.setVisibility(View.INVISIBLE);
+                }
+                Random random = new Random();
+                int i = random.nextInt(9);
+                imageArray[i].setVisibility(View.VISIBLE);
+
+                handler.postDelayed(runnable,350);
+            }
+        };
+        handler.post(runnable);
+
     }
 }
